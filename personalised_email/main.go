@@ -17,8 +17,8 @@ type User struct {
 }
 
 type Message struct {
-	Subject string
-	HtmlFile    string `yaml:"html_file"`
+	Subject  string
+	HtmlFile string `yaml:"html_file"`
 }
 
 func main() {
@@ -69,7 +69,7 @@ func setupSMTP() func(to string, msg []byte) error {
 	serverName := smtpHost + ":" + smtpPort
 	// Setup SMTP
 	auth := smtp.PlainAuth("", smtpUsername, smtpPassword, smtpHost)
-	return func (to string, msg []byte) error {
+	return func(to string, msg []byte) error {
 		return smtp.SendMail(serverName, auth, from, []string{to}, msg)
 	}
 }
