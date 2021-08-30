@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/smtp"
 	"os"
+	"sync"
 )
 
 type User struct {
@@ -24,16 +25,22 @@ type Message struct {
 func main() {
 	_ = godotenv.Load()
 	sendMessage := setupSMTP()
-
 	users := getReceivers()
+
+	var wg sync.WaitGroup
+	wg.Add(len(users))
 	for _, user := range users {
-		msg := getMessage(user)
-		if err := sendMessage(user.Email, msg); err != nil {
-			log.Panic(err)
-		}
-		log.Println("Sent to " + user.Name + " (" + user.Email + ")")
+		go func(user User) {
+			defer wg.Done()
+			msg := getMessage(user)
+			if err := sendMessage(user.Email, msg); err != nil {
+				log.Panic(err)
+			}
+			log.Println("Sent to " + user.Name + " (" + user.Email + ")")
+		}(user)
 	}
 
+	wg.Wait()
 	log.Println("All emails sent!")
 }
 
