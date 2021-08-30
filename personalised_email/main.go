@@ -53,7 +53,7 @@ func getMessage(user User) []byte {
 	}
 	greet := "Hello " + user.Name + ","
 	return []byte(fmt.Sprintf(
-		"MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\r\n"+
+		"MIME-version: 1.0\nContent-Type: text/html; charset=\"UTF-8\";\r\n"+
 			"From :%s\r\n"+
 			"To: %s\r\n"+
 			"Subject: %s\r\n"+
