@@ -31,3 +31,9 @@ users.yaml
   name: Jane
   email: x@y.z
 ```
+
+## Run script
+After defining everything, simply run
+```sh
+go run main.go
+```

@@ -11,6 +11,10 @@ import (
 	"sync"
 )
 
+const (
+	gmailConcurrency = 8
+)
+
 type User struct {
 	FullName string
 	Name     string
@@ -26,12 +30,15 @@ func main() {
 	_ = godotenv.Load()
 	sendMessage := setupSMTP()
 	users := getReceivers()
-
 	var wg sync.WaitGroup
-	wg.Add(len(users))
+	guard := make(chan struct{}, gmailConcurrency/2)
+
 	for _, user := range users {
+		guard <- struct{}{}
+		wg.Add(1)
 		go func(user User) {
 			defer wg.Done()
+			defer func() { <-guard }()
 			msg := getMessage(user)
 			if err := sendMessage(user.Email, msg); err != nil {
 				log.Panic(err)
@@ -45,13 +52,14 @@ func main() {
 }
 
 func getMessage(user User) []byte {
+	// TODO templating
 	var msg Message
 	unmarshalYaml("message.yaml", &msg)
 	html, err := ioutil.ReadFile(msg.HtmlFile)
 	if err != nil {
 		log.Panic(err)
 	}
-	greet := "Hello " + user.Name + ","
+	greet := "Hi " + user.Name + ","
 	return []byte(fmt.Sprintf(
 		"MIME-version: 1.0\nContent-Type: text/html; charset=\"UTF-8\";\r\n"+
 			"From :%s\r\n"+
@@ -84,9 +92,11 @@ func setupSMTP() func(to string, msg []byte) error {
 func getReceivers() []User {
 	if os.Getenv("TEST") != "false" {
 		email := os.Getenv("SMTP_USERNAME")
-		return []User{
-			{"full name", "tester", email},
+		var users []User
+		for i := 0; i < 2; i++ {
+			users = append(users, User{"full name", "tester", email})
 		}
+		return users
 	}
 	var users []User
 	unmarshalYaml("users.yaml", &users)
