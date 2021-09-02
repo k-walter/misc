@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  huginn:
+    image: huginn/huginn
+    container_name: huginn
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ./db:/var/lib/mysql

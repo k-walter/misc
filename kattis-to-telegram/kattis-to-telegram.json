@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "name": "Kattis to Telegram",
+  "description": "Created by https://github.com/k-walter to monitor students on Kattis",
+  "source_url": false,
+  "guid": "12567f74b972d6bb14aebd4534b14d3b",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#5bc0de",
+  "icon": "cloud",
+  "exported_at": "2021-09-02T13:47:54Z",
+  "agents": [
+    {
+      "type": "Agents::PostAgent",
+      "name": "Kattis Auth",
+      "disabled": false,
+      "guid": "4e2bb4414af46b28259f730e88946a68",
+      "options": {
+        "post_url": "{%credential kattis_url %}login",
+        "expected_receive_period_in_days": "1",
+        "content_type": "form",
+        "method": "post",
+        "payload": {
+          "user": "{% credential kattis_username %}",
+          "password": "{% credential kattis_password %}",
+          "script": "true"
+        },
+        "emit_events": "true",
+        "no_merge": "false",
+        "output_mode": "clean"
+      },
+      "schedule": "every_1m",
+      "keep_events_for": 3600,
+      "propagate_immediately": true
+    },
+    {
+      "type": "Agents::TelegramAgent",
+      "name": "Telegram Bot",
+      "disabled": false,
+      "guid": "55db321748abbe0a7f27bb1a28f0449e",
+      "options": {
+        "auth_token": "{%credential telegram_token %}",
+        "chat_id": "69761990",
+        "caption": "",
+        "disable_notification": "",
+        "disable_web_page_preview": "",
+        "long_message": "",
+        "parse_mode": "html"
+      },
+      "propagate_immediately": true
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Kattis Filter",
+      "disabled": false,
+      "guid": "929ab1844d1984b2b22d0872da9816e0",
+      "options": {
+        "expected_receive_period_in_days": "2",
+        "keep_event": "true",
+        "rules": [
+          "regex",
+          {
+            "type": "regex",
+            "path": "name",
+            "value": "John Doe"
+          },
+          {
+            "type": "regex",
+            "path": "name",
+            "value": "Mary Jane"
+          }
+        ],
+        "must_match": "1"
+      },
+      "keep_events_for": 3600,
+      "propagate_immediately": true
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Format Kattis --> Telegram",
+      "disabled": false,
+      "guid": "93d1290c09e704343bdb6e69c57a0129",
+      "options": {
+        "instructions": {
+          "text": "Name: {{name}}{% line_break %}Status: {{status}}{% line_break %}Problem: {{problem}}{% line_break %}Submission: {%credential kattis_url %}submissions/{{url}}{% line_break %}"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 3600,
+      "propagate_immediately": true
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Kattis Submissions",
+      "disabled": false,
+      "guid": "93e3e88358383ee14186ee2ac38c0478",
+      "options": {
+        "expected_update_period_in_days": "7",
+        "url": "{%credential kattis_url %}submissions",
+        "type": "html",
+        "mode": "on_change",
+        "extract": {
+          "url": {
+            "css": ".table-submissions tr td:nth-child(1)",
+            "value": "string(.)"
+          },
+          "name": {
+            "css": ".table-submissions tr td:nth-child(3)",
+            "value": "string(.)"
+          },
+          "problem": {
+            "css": ".table-submissions tr td:nth-child(4)",
+            "value": "string(.)"
+          },
+          "status": {
+            "css": ".table-submissions tr td:nth-child(5)",
+            "value": "string(.)"
+          }
+        },
+        "headers": {
+          "Cookie": "{{ headers['Set-Cookie'] }}"
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": true
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 4
+    },
+    {
+      "source": 2,
+      "receiver": 3
+    },
+    {
+      "source": 3,
+      "receiver": 1
+    },
+    {
+      "source": 4,
+      "receiver": 2
+    }
+  ],
+  "control_links": [
+
+  ]
+}
