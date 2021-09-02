@@ -12,8 +12,8 @@ To deduplicate efforts, Huginn was chosen as a self-hosted FOSS IFTTT I use for 
 
 ### Huginn Agents
 Each agent passes its output to the next agent instantly.
-1. `Kattis Auth` agent runs every 1min to receive a cookie
-1. `Kattis Submissions` crawls Kattis queue withe the cookie for new submissions
+1. `Kattis Auth` agent runs every 1min and returns a cookie
+1. `Kattis Submissions` crawls Kattis queue with the cookie for new submissions
 1. `Kattis Filter` filters interested users out of new updates
 1. `Format Kattis --> Telegram` formats from JSON to Telegram readable HTML
 1. `Telegram Bot` sends the message to you :)
