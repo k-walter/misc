@@ -11,7 +11,7 @@ To deduplicate efforts, Huginn was chosen as a self-hosted FOSS IFTTT I use for 
 - [x] Schedule checks
 
 ### Huginn Agents
-Each agent passes its output to the next agent instantly.
+![image](https://user-images.githubusercontent.com/3593284/131877110-40d5fe3d-9867-4679-a80e-a50d52066cb5.png)
 1. `Kattis Auth` agent runs every 1min and returns a cookie
 1. `Kattis Submissions` crawls Kattis queue with the cookie for new submissions
 1. `Kattis Filter` filters interested users out of new updates
