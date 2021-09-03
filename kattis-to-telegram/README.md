@@ -16,7 +16,7 @@ To deduplicate efforts, Huginn was chosen as a self-hosted FOSS IFTTT I use for 
 1. `Kattis Submissions` crawls Kattis queue with the cookie for new submissions
 1. `Kattis Filter` filters interested users out of new updates
 1. `Format Kattis --> Telegram` formats from JSON to Telegram readable HTML
-1. `Telegram Bot` sends the message to you :)
+1. `Telegram Bot` (homelab bot above) sends the message to you :)
 
 ## Getting Started
 ### 1. Install Huginn
