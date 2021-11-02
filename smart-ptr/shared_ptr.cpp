@@ -18,13 +18,13 @@ template<typename T>
 class shared_ptr {
 private:
 	T* val;
-	int* cnt;
+	std::atomic<unsigned int>* cnt;
 public:
 	shared_ptr() = default;
 
 	shared_ptr(T* v) {
 		val = v;
-		cnt = new int(1);
+		cnt = new std::atomic<unsigned int>(1);
 	}
 
 	shared_ptr(const shared_ptr<T>& v) {
@@ -35,9 +35,9 @@ public:
 	}
 
 	~shared_ptr() {
-		--(*cnt);
-		std::cout << "shared_ptr::Deconstructing with " << *cnt << " left\n";
-		if (*cnt > 0) return;
+		unsigned int rem = --(*cnt);
+		std::cout << "shared_ptr::Deconstructing with " << rem << " left\n";
+		if (rem > 0) return;
 		delete val;
 		delete cnt;
 	}
