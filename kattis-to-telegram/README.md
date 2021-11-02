@@ -1,4 +1,4 @@
-# Kattis to Telgram
+# Kattis to Telegram
 Created by me to monitor, aggregate and notify student assignment attempts on https://nus.kattis.com/. This has only been tested with the queue feature for NUS Kattis.
 
 To deduplicate efforts, Huginn was chosen as a self-hosted FOSS IFTTT I use for many purposes. 
@@ -11,15 +11,15 @@ To deduplicate efforts, Huginn was chosen as a self-hosted FOSS IFTTT I use for 
 - [x] Schedule checks
 
 ### Huginn Agents
-Each agent passes its output to the next agent instantly.
-1. `Kattis Auth` agent runs every 1min to receive a cookie
-1. `Kattis Submissions` crawls Kattis queue withe the cookie for new submissions
+![image](https://user-images.githubusercontent.com/3593284/131877110-40d5fe3d-9867-4679-a80e-a50d52066cb5.png)
+1. `Kattis Auth` agent runs every 1min and returns a cookie
+1. `Kattis Submissions` crawls Kattis queue with the cookie for new submissions
 1. `Kattis Filter` filters interested users out of new updates
 1. `Format Kattis --> Telegram` formats from JSON to Telegram readable HTML
-1. `Telegram Bot` sends the message to you :)
+1. `Telegram Bot` (homelab bot above) sends the message to you :)
 
 ## Getting Started
-### 1. Install Huginns
+### 1. Install Huginn
 1. Ensure you have `docker` and `docker-compose` installed. Alternatively, you may install Huginn locally and skip this section.
 1. Run `./run.sh`.
 1. If unable to run, please change permissions with `sudo chmod +x run.sh`.
@@ -35,7 +35,7 @@ Each agent passes its output to the next agent instantly.
 	- If you are not using NUS kattis, replace `https://nus.kattis.com/` with your Kattis domain
 1. In `kattis-to-telegram.json`, find and replace `John Doe` and `Mary Jane` with the users' names you are interested in.
 
-### 3. Setup huginn
+### 3. Setup Huginn
 1. Login to Huginn via `localhost:3000`, or your designated port.
 	According to Huginn's GitHub, the default username and password are `admin` and `password` respectively. Please refer to the GitHub if this has changed.
 1. Upload credentials via Credentials > Upload Credentials > browse > (`user_credentials.json` file)
