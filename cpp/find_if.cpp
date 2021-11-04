@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 
 template<typename T>
-T* find_if(T* begin, T* end, bool (*fn)(const T&)) {
+T* find_if(T* begin, T* end, std::function<bool(const T&)> fn) {
 	std::cout << sizeof(fn) << "\n";
 	for (; begin != end; begin++) {
-		if ((*fn)(*begin)) return begin;
+		if (fn(*begin)) return begin;
 	}
 	return end;
 }
@@ -14,7 +14,7 @@ int main() {
 	int* a = new int[N];
 	std::iota(a, a+N, 0);
 
-	auto it = find_if<int>(a, a+N, [](const int& v) {
+	auto it = find_if<int>(a, a+N, [](const int& v) -> bool {
 		return v == 5;
 	});
 	if (it == a+N) std::cout << "not found";
